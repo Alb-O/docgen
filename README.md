@@ -70,7 +70,7 @@ Create a `_docs.nix` file (or similar) describing what to document:
         inherit pkgs;
         manifest = ./src/_docs.nix;
         srcDir = ./src;
-        siteDir = ./site;
+        siteDir = ./docs;
         name = "myproject";
         # Optional: for options.md generation
         optionsJson = self'.packages.options-json;
@@ -106,8 +106,8 @@ Creates a `docgen` instance with scripts and derivations for generating document
 | `optionsJson`  | path or null | `null`                                                                    | JSON file with options for options.md generation                       |
 | `anchorPrefix` | string       | `""`                                                                      | Prefix for function anchors (e.g., "mylib")                            |
 | `name`         | string       | `"docs"`                                                                  | Project name for derivation naming                                     |
-| `referenceDir` | string       | `"reference"`                                                             | Subdirectory within `site/src/` for generated docs                     |
-| `localPaths`   | attrset      | `{ site = "./site"; src = "./src"; }`                                     | Paths used by serve/build scripts                                      |
+| `referenceDir` | string       | `"reference"`                                                             | Subdirectory within `docs/src/` for generated docs                     |
+| `localPaths`   | attrset      | `{ site = "./docs"; src = "./src"; }`                                     | Paths used by serve/build scripts                                      |
 | `outputFiles`  | attrset      | `{ files = "files.md"; methods = "methods.md"; options = "options.md"; }` | Output file names                                                      |
 | `nixdocPkg`    | package      | nixdoc from input                                                         | Custom nixdoc package                                                  |
 | `mdformatPkg`  | package      | mdformat with plugins                                                     | Custom mdformat package                                                |
@@ -258,7 +258,7 @@ your-project/
 ├── src/
 │   ├── _docs.nix          # Documentation manifest
 │   └── *.nix              # Source files to document
-├── site/
+├── docs/
 │   ├── book.toml          # mdbook configuration
 │   └── src/
 │       ├── SUMMARY.md     # mdbook table of contents
@@ -276,8 +276,8 @@ You can customize the output location and file names:
 ```nix
 dg = docgen.mkDocgen {
   # ...
-  referenceDir = "api";              # Put in site/src/api/ instead of reference/
-  # referenceDir = "";               # Put directly in site/src/
+  referenceDir = "api";              # Put in docs/src/api/ instead of reference/
+  # referenceDir = "";               # Put directly in docs/src/
   
   localPaths = {
     site = "./docs";                 # If your site is in ./docs

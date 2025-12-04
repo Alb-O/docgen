@@ -173,7 +173,7 @@ let
       null;
 
   # Local paths for serve/build scripts
-  localSiteDir = localPaths.site or "./site";
+  localSiteDir = localPaths.site or "./docs";
   localSrcDir = localPaths.src or "./src";
   localRefDir = if referenceDir == "" then "" else "/${referenceDir}";
 

@@ -113,7 +113,7 @@
       );
 
       # Main entry point: create a docgen instance for a project
-      # Usage: docgen.mkDocgen { inherit pkgs; manifest = ./docs.nix; srcDir = ./src; siteDir = ./site; }
+      # Usage: docgen.mkDocgen { inherit pkgs; manifest = ./docs.nix; srcDir = ./src; siteDir = ./docs; }
       mkDocgen =
         {
           pkgs,
@@ -144,7 +144,7 @@
           # Optional: relative paths for local dev scripts (serve/build)
           # These are the paths used when running `nix run .#docs` from project root
           localPaths ? {
-            site = "./site";
+            site = "./docs";
             src = "./src";
           },
           # Optional: custom output file names
