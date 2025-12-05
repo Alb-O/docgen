@@ -186,8 +186,12 @@ impl ManualEntry {
             output.push_str(&format!("{}\n\n", paragraph));
         }
 
-        // Function argument names
-        if !self.args.is_empty() {
+        // Function argument names - only output if the description doesn't already
+        // contain an Arguments section (to avoid duplication)
+        let has_args_section = self.description.iter().any(|p| {
+            p.contains("# Arguments") || p.contains("## Arguments") || p.contains("### Arguments")
+        });
+        if !self.args.is_empty() && !has_args_section {
             for arg in self.args {
                 output.push_str(&format!("{}\n", arg.format_argument()));
             }

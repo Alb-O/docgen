@@ -29,16 +29,6 @@ concatMapStrings (x: "a" + x) ["foo" "bar"]
 => "afooabar"
 ```
 
-`f`
-
-: Function argument
-
-
-`list`
-
-: Function argument
-
-
 ## `hasPrefix` {#hasPrefix}
 
 Determine whether a string has given prefix.
@@ -56,12 +46,3 @@ hasPrefix "foo" "foobar"
 hasPrefix "foo" "barfoo"
 => false
 ```
-
-`pref`
-
-: Function argument
-
-
-`str`
-
-: Function argument

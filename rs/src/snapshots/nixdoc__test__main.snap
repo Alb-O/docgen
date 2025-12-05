@@ -34,16 +34,6 @@ concatMapStrings (x: "a" + x) ["foo" "bar"]
 => "afooabar"
 ```
 
-`f`
-
-: Function argument
-
-
-`list`
-
-: Function argument
-
-
 Located at [lib/strings.nix:59](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L59) in `<nixpkgs>`.
 
 ## `lib.strings.hasPrefix` {#function-library-lib.strings.hasPrefix}
@@ -63,15 +53,5 @@ hasPrefix "foo" "foobar"
 hasPrefix "foo" "barfoo"
 => false
 ```
-
-`pref`
-
-: Function argument
-
-
-`str`
-
-: Function argument
-
 
 Located at [lib/strings.nix:254](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L254) in `<nixpkgs>`.

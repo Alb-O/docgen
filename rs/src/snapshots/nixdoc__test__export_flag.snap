@@ -18,11 +18,6 @@ exportedFunc "test"
 arg
 : The input argument.
 
-`arg`
-
-: Function argument
-
-
 ## `lib.export.anotherExported` {#function-library-lib.export.anotherExported}
 
 Another documented function.
@@ -34,12 +29,3 @@ x
 
 y
 : Second value.
-
-`x`
-
-: Function argument
-
-
-`y`
-
-: Function argument
