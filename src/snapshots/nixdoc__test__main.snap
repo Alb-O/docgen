@@ -1,0 +1,1697 @@
+---
+source: src/test.rs
+assertion_line: 23
+expression: output
+---
+# string manipulation functions {#sec-functions-library-strings}
+String manipulation functions.
+
+## `lib.strings.concatStrings` {#function-library-lib.strings.concatStrings}
+
+**Type**: `concatStrings :: [string] -> string`
+
+Concatenate a list of strings.
+
+::: {.example #function-library-example-lib.strings.concatStrings}
+# `lib.strings.concatStrings` usage example
+
+```nix
+concatStrings ["foo" "bar"]
+=> "foobar"
+```
+:::
+
+Located at [lib/strings.nix:49](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L49) in `<nixpkgs>`.
+
+## `lib.strings.concatMapStrings` {#function-library-lib.strings.concatMapStrings}
+
+**Type**: `concatMapStrings :: (a -> string) -> [a] -> string`
+
+Map a function over a list and concatenate the resulting strings.
+
+`f`
+
+: Function argument
+
+
+`list`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.concatMapStrings}
+# `lib.strings.concatMapStrings` usage example
+
+```nix
+concatMapStrings (x: "a" + x) ["foo" "bar"]
+=> "afooabar"
+```
+:::
+
+Located at [lib/strings.nix:59](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L59) in `<nixpkgs>`.
+
+## `lib.strings.concatImapStrings` {#function-library-lib.strings.concatImapStrings}
+
+**Type**: `concatImapStrings :: (int -> a -> string) -> [a] -> string`
+
+Like `concatMapStrings` except that the f functions also gets the
+position as a parameter.
+
+`f`
+
+: Function argument
+
+
+`list`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.concatImapStrings}
+# `lib.strings.concatImapStrings` usage example
+
+```nix
+concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
+=> "1-foo2-bar"
+```
+:::
+
+Located at [lib/strings.nix:70](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L70) in `<nixpkgs>`.
+
+## `lib.strings.intersperse` {#function-library-lib.strings.intersperse}
+
+**Type**: `intersperse :: a -> [a] -> [a]`
+
+Place an element between each element of a list
+
+`separator`
+
+: Separator to add between elements
+
+
+`list`
+
+: Input list
+
+
+::: {.example #function-library-example-lib.strings.intersperse}
+# `lib.strings.intersperse` usage example
+
+```nix
+intersperse "/" ["usr" "local" "bin"]
+=> ["usr" "/" "local" "/" "bin"].
+```
+:::
+
+Located at [lib/strings.nix:80](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L80) in `<nixpkgs>`.
+
+## `lib.strings.concatStringsSep` {#function-library-lib.strings.concatStringsSep}
+
+**Type**: `concatStringsSep :: string -> [string] -> string`
+
+Concatenate a list of strings with a separator between each element
+
+::: {.example #function-library-example-lib.strings.concatStringsSep}
+# `lib.strings.concatStringsSep` usage example
+
+```nix
+concatStringsSep "/" ["usr" "local" "bin"]
+=> "usr/local/bin"
+```
+:::
+
+Located at [lib/strings.nix:97](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L97) in `<nixpkgs>`.
+
+## `lib.strings.concatMapStringsSep` {#function-library-lib.strings.concatMapStringsSep}
+
+**Type**: `concatMapStringsSep :: string -> (a -> string) -> [a] -> string`
+
+Maps a function over a list of strings and then concatenates the
+result with the specified separator interspersed between
+elements.
+
+`sep`
+
+: Separator to add between elements
+
+
+`f`
+
+: Function to map over the list
+
+
+`list`
+
+: List of input strings
+
+
+::: {.example #function-library-example-lib.strings.concatMapStringsSep}
+# `lib.strings.concatMapStringsSep` usage example
+
+```nix
+concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
+=> "FOO-BAR-BAZ"
+```
+:::
+
+Located at [lib/strings.nix:110](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L110) in `<nixpkgs>`.
+
+## `lib.strings.concatImapStringsSep` {#function-library-lib.strings.concatImapStringsSep}
+
+**Type**: `concatIMapStringsSep :: string -> (int -> a -> string) -> [a] -> string`
+
+Same as `concatMapStringsSep`, but the mapping function
+additionally receives the position of its argument.
+
+`sep`
+
+: Separator to add between elements
+
+
+`f`
+
+: Function that receives elements and their positions
+
+
+`list`
+
+: List of input strings
+
+
+::: {.example #function-library-example-lib.strings.concatImapStringsSep}
+# `lib.strings.concatImapStringsSep` usage example
+
+```nix
+concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
+=> "6-3-2"
+```
+:::
+
+Located at [lib/strings.nix:127](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L127) in `<nixpkgs>`.
+
+## `lib.strings.concatLines` {#function-library-lib.strings.concatLines}
+
+**Type**: `concatLines :: [string] -> string`
+
+Concatenate a list of strings, adding a newline at the end of each one.
+Defined as `concatMapStrings (s: s + "\n")`.
+
+::: {.example #function-library-example-lib.strings.concatLines}
+# `lib.strings.concatLines` usage example
+
+```nix
+concatLines [ "foo" "bar" ]
+=> "foo\nbar\n"
+```
+:::
+
+Located at [lib/strings.nix:144](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L144) in `<nixpkgs>`.
+
+## `lib.strings.makeSearchPath` {#function-library-lib.strings.makeSearchPath}
+
+**Type**: `makeSearchPath :: string -> [string] -> string`
+
+Construct a Unix-style, colon-separated search path consisting of
+the given `subDir` appended to each of the given paths.
+
+`subDir`
+
+: Directory name to append
+
+
+`paths`
+
+: List of base paths
+
+
+::: {.example #function-library-example-lib.strings.makeSearchPath}
+# `lib.strings.makeSearchPath` usage example
+
+```nix
+makeSearchPath "bin" ["/root" "/usr" "/usr/local"]
+=> "/root/bin:/usr/bin:/usr/local/bin"
+makeSearchPath "bin" [""]
+=> "/bin"
+```
+:::
+
+Located at [lib/strings.nix:157](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L157) in `<nixpkgs>`.
+
+## `lib.strings.makeSearchPathOutput` {#function-library-lib.strings.makeSearchPathOutput}
+
+**Type**: `string -> string -> [package] -> string`
+
+Construct a Unix-style search path by appending the given
+`subDir` to the specified `output` of each of the packages. If no
+output by the given name is found, fallback to `.out` and then to
+the default.
+
+`output`
+
+: Package output to use
+
+
+`subDir`
+
+: Directory name to append
+
+
+`pkgs`
+
+: List of packages
+
+
+::: {.example #function-library-example-lib.strings.makeSearchPathOutput}
+# `lib.strings.makeSearchPathOutput` usage example
+
+```nix
+makeSearchPathOutput "dev" "bin" [ pkgs.openssl pkgs.zlib ]
+=> "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev/bin:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/bin"
+```
+:::
+
+Located at [lib/strings.nix:175](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L175) in `<nixpkgs>`.
+
+## `lib.strings.makeLibraryPath` {#function-library-lib.strings.makeLibraryPath}
+
+Construct a library search path (such as RPATH) containing the
+libraries for a set of packages
+
+::: {.example #function-library-example-lib.strings.makeLibraryPath}
+# `lib.strings.makeLibraryPath` usage example
+
+```nix
+makeLibraryPath [ "/usr" "/usr/local" ]
+=> "/usr/lib:/usr/local/lib"
+pkgs = import <nixpkgs> { }
+makeLibraryPath [ pkgs.openssl pkgs.zlib ]
+=> "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r/lib:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/lib"
+```
+:::
+
+Located at [lib/strings.nix:193](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L193) in `<nixpkgs>`.
+
+## `lib.strings.makeBinPath` {#function-library-lib.strings.makeBinPath}
+
+Construct a binary search path (such as $PATH) containing the
+binaries for a set of packages.
+
+::: {.example #function-library-example-lib.strings.makeBinPath}
+# `lib.strings.makeBinPath` usage example
+
+```nix
+makeBinPath ["/root" "/usr" "/usr/local"]
+=> "/root/bin:/usr/bin:/usr/local/bin"
+```
+:::
+
+Located at [lib/strings.nix:202](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L202) in `<nixpkgs>`.
+
+## `lib.strings.normalizePath` {#function-library-lib.strings.normalizePath}
+
+**Type**: `normalizePath :: string -> string`
+
+Normalize path, removing extraneous /s
+
+`s`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.normalizePath}
+# `lib.strings.normalizePath` usage example
+
+```nix
+normalizePath "/a//b///c/"
+=> "/a/b/c/"
+```
+:::
+
+Located at [lib/strings.nix:212](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L212) in `<nixpkgs>`.
+
+## `lib.strings.optionalString` {#function-library-lib.strings.optionalString}
+
+**Type**: `optionalString :: bool -> string -> string`
+
+Depending on the boolean `cond', return either the given string
+or the empty string. Useful to concatenate against a bigger string.
+
+`cond`
+
+: Condition
+
+
+`string`
+
+: String to return if condition is true
+
+
+::: {.example #function-library-example-lib.strings.optionalString}
+# `lib.strings.optionalString` usage example
+
+```nix
+optionalString true "some-string"
+=> "some-string"
+optionalString false "some-string"
+=> ""
+```
+:::
+
+Located at [lib/strings.nix:238](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L238) in `<nixpkgs>`.
+
+## `lib.strings.hasPrefix` {#function-library-lib.strings.hasPrefix}
+
+**Type**: `hasPrefix :: string -> string -> bool`
+
+Determine whether a string has given prefix.
+
+`pref`
+
+: Prefix to check for
+
+
+`str`
+
+: Input string
+
+
+::: {.example #function-library-example-lib.strings.hasPrefix}
+# `lib.strings.hasPrefix` usage example
+
+```nix
+hasPrefix "foo" "foobar"
+=> true
+hasPrefix "foo" "barfoo"
+=> false
+```
+:::
+
+Located at [lib/strings.nix:254](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L254) in `<nixpkgs>`.
+
+## `lib.strings.hasSuffix` {#function-library-lib.strings.hasSuffix}
+
+**Type**: `hasSuffix :: string -> string -> bool`
+
+Determine whether a string has given suffix.
+
+`suffix`
+
+: Suffix to check for
+
+
+`content`
+
+: Input string
+
+
+::: {.example #function-library-example-lib.strings.hasSuffix}
+# `lib.strings.hasSuffix` usage example
+
+```nix
+hasSuffix "foo" "foobar"
+=> false
+hasSuffix "foo" "barfoo"
+=> true
+```
+:::
+
+Located at [lib/strings.nix:280](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L280) in `<nixpkgs>`.
+
+## `lib.strings.hasInfix` {#function-library-lib.strings.hasInfix}
+
+**Type**: `hasInfix :: string -> string -> bool`
+
+Determine whether a string contains the given infix
+
+`infix`
+
+: Function argument
+
+
+`content`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.hasInfix}
+# `lib.strings.hasInfix` usage example
+
+```nix
+hasInfix "bc" "abcd"
+=> true
+hasInfix "ab" "abcd"
+=> true
+hasInfix "cd" "abcd"
+=> true
+hasInfix "foo" "abcd"
+=> false
+```
+:::
+
+Located at [lib/strings.nix:317](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L317) in `<nixpkgs>`.
+
+## `lib.strings.stringToCharacters` {#function-library-lib.strings.stringToCharacters}
+
+**Type**: `stringToCharacters :: string -> [string]`
+
+Convert a string to a list of characters (i.e. singleton strings).
+This allows you to, e.g., map a function over each character.  However,
+note that this will likely be horribly inefficient; Nix is not a
+general purpose programming language. Complex string manipulations
+should, if appropriate, be done in a derivation.
+Also note that Nix treats strings as a list of bytes and thus doesn't
+handle unicode.
+
+`s`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.stringToCharacters}
+# `lib.strings.stringToCharacters` usage example
+
+```nix
+stringToCharacters ""
+=> [ ]
+stringToCharacters "abc"
+=> [ "a" "b" "c" ]
+stringToCharacters "🦄"
+=> [ "�" "�" "�" "�" ]
+```
+:::
+
+Located at [lib/strings.nix:347](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L347) in `<nixpkgs>`.
+
+## `lib.strings.stringAsChars` {#function-library-lib.strings.stringAsChars}
+
+**Type**: `stringAsChars :: (string -> string) -> string -> string`
+
+Manipulate a string character by character and replace them by
+strings before concatenating the results.
+
+`f`
+
+: Function to map over each individual character
+
+
+`s`
+
+: Input string
+
+
+::: {.example #function-library-example-lib.strings.stringAsChars}
+# `lib.strings.stringAsChars` usage example
+
+```nix
+stringAsChars (x: if x == "a" then "i" else x) "nax"
+=> "nix"
+```
+:::
+
+Located at [lib/strings.nix:359](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L359) in `<nixpkgs>`.
+
+## `lib.strings.charToInt` {#function-library-lib.strings.charToInt}
+
+**Type**: `charToInt :: string -> int`
+
+Convert char to ascii value, must be in printable range
+
+`c`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.charToInt}
+# `lib.strings.charToInt` usage example
+
+```nix
+charToInt "A"
+=> 65
+charToInt "("
+=> 40
+```
+:::
+
+Located at [lib/strings.nix:378](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L378) in `<nixpkgs>`.
+
+## `lib.strings.escape` {#function-library-lib.strings.escape}
+
+**Type**: `escape :: [string] -> string -> string`
+
+Escape occurrence of the elements of `list` in `string` by
+prefixing it with a backslash.
+
+`list`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.escape}
+# `lib.strings.escape` usage example
+
+```nix
+escape ["(" ")"] "(foo)"
+=> "\\(foo\\)"
+```
+:::
+
+Located at [lib/strings.nix:389](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L389) in `<nixpkgs>`.
+
+## `lib.strings.escapeC` {#function-library-lib.strings.escapeC}
+
+**Type**: `escapeC = [string] -> string -> string`
+
+Escape occurrence of the element of `list` in `string` by
+converting to its ASCII value and prefixing it with \\x.
+Only works for printable ascii characters.
+
+`list`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.escapeC}
+# `lib.strings.escapeC` usage example
+
+```nix
+escapeC [" "] "foo bar"
+=> "foo\\x20bar"
+```
+:::
+
+Located at [lib/strings.nix:402](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L402) in `<nixpkgs>`.
+
+## `lib.strings.escapeURL` {#function-library-lib.strings.escapeURL}
+
+**Type**: `escapeURL :: string -> string`
+
+Escape the string so it can be safely placed inside a URL
+query.
+
+::: {.example #function-library-example-lib.strings.escapeURL}
+# `lib.strings.escapeURL` usage example
+
+```nix
+escapeURL "foo/bar baz"
+=> "foo%2Fbar%20baz"
+```
+:::
+
+Located at [lib/strings.nix:413](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L413) in `<nixpkgs>`.
+
+## `lib.strings.escapeShellArg` {#function-library-lib.strings.escapeShellArg}
+
+**Type**: `escapeShellArg :: string -> string`
+
+Quote string to be used safely within the Bourne shell.
+
+`arg`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.escapeShellArg}
+# `lib.strings.escapeShellArg` usage example
+
+```nix
+escapeShellArg "esc'ape\nme"
+=> "'esc'\\''ape\nme'"
+```
+:::
+
+Located at [lib/strings.nix:427](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L427) in `<nixpkgs>`.
+
+## `lib.strings.escapeShellArgs` {#function-library-lib.strings.escapeShellArgs}
+
+**Type**: `escapeShellArgs :: [string] -> string`
+
+Quote all arguments to be safely passed to the Bourne shell.
+
+::: {.example #function-library-example-lib.strings.escapeShellArgs}
+# `lib.strings.escapeShellArgs` usage example
+
+```nix
+escapeShellArgs ["one" "two three" "four'five"]
+=> "'one' 'two three' 'four'\\''five'"
+```
+:::
+
+Located at [lib/strings.nix:437](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L437) in `<nixpkgs>`.
+
+## `lib.strings.isValidPosixName` {#function-library-lib.strings.isValidPosixName}
+
+**Type**: `string -> bool`
+
+Test whether the given name is a valid POSIX shell variable name.
+
+`name`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.isValidPosixName}
+# `lib.strings.isValidPosixName` usage example
+
+```nix
+isValidPosixName "foo_bar000"
+=> true
+isValidPosixName "0-bad.jpg"
+=> false
+```
+:::
+
+Located at [lib/strings.nix:449](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L449) in `<nixpkgs>`.
+
+## `lib.strings.toShellVar` {#function-library-lib.strings.toShellVar}
+
+**Type**: `string -> (string | listOf string | attrsOf string) -> string`
+
+Translate a Nix value into a shell variable declaration, with proper escaping.
+
+The value can be a string (mapped to a regular variable), a list of strings
+(mapped to a Bash-style array) or an attribute set of strings (mapped to a
+Bash-style associative array). Note that "string" includes string-coercible
+values like paths or derivations.
+
+Strings are translated into POSIX sh-compatible code; lists and attribute sets
+assume a shell that understands Bash syntax (e.g. Bash or ZSH).
+
+`name`
+
+: Function argument
+
+
+`value`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.toShellVar}
+# `lib.strings.toShellVar` usage example
+
+```nix
+''
+  ${toShellVar "foo" "some string"}
+  [[ "$foo" == "some string" ]]
+''
+```
+:::
+
+Located at [lib/strings.nix:469](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L469) in `<nixpkgs>`.
+
+## `lib.strings.toShellVars` {#function-library-lib.strings.toShellVars}
+
+**Type**: `attrsOf (string | listOf string | attrsOf string) -> string`
+
+Translate an attribute set into corresponding shell variable declarations
+using `toShellVar`.
+
+`vars`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.toShellVars}
+# `lib.strings.toShellVars` usage example
+
+```nix
+let
+  foo = "value";
+  bar = foo;
+in ''
+  ${toShellVars { inherit foo bar; }}
+  [[ "$foo" == "$bar" ]]
+''
+```
+:::
+
+Located at [lib/strings.nix:497](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L497) in `<nixpkgs>`.
+
+## `lib.strings.escapeNixString` {#function-library-lib.strings.escapeNixString}
+
+**Type**: `string -> string`
+
+Turn a string into a Nix expression representing that string
+
+`s`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.escapeNixString}
+# `lib.strings.escapeNixString` usage example
+
+```nix
+escapeNixString "hello\${}\n"
+=> "\"hello\\\${}\\n\""
+```
+:::
+
+Located at [lib/strings.nix:507](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L507) in `<nixpkgs>`.
+
+## `lib.strings.escapeRegex` {#function-library-lib.strings.escapeRegex}
+
+**Type**: `string -> string`
+
+Turn a string into an exact regular expression
+
+::: {.example #function-library-example-lib.strings.escapeRegex}
+# `lib.strings.escapeRegex` usage example
+
+```nix
+escapeRegex "[^a-z]*"
+=> "\\[\\^a-z]\\*"
+```
+:::
+
+Located at [lib/strings.nix:517](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L517) in `<nixpkgs>`.
+
+## `lib.strings.escapeNixIdentifier` {#function-library-lib.strings.escapeNixIdentifier}
+
+**Type**: `string -> string`
+
+Quotes a string if it can't be used as an identifier directly.
+
+`s`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.escapeNixIdentifier}
+# `lib.strings.escapeNixIdentifier` usage example
+
+```nix
+escapeNixIdentifier "hello"
+=> "hello"
+escapeNixIdentifier "0abc"
+=> "\"0abc\""
+```
+:::
+
+Located at [lib/strings.nix:529](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L529) in `<nixpkgs>`.
+
+## `lib.strings.escapeXML` {#function-library-lib.strings.escapeXML}
+
+**Type**: `string -> string`
+
+Escapes a string such that it is safe to include verbatim in an XML
+document.
+
+::: {.example #function-library-example-lib.strings.escapeXML}
+# `lib.strings.escapeXML` usage example
+
+```nix
+escapeXML ''"test" 'test' < & >''
+=> "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;"
+```
+:::
+
+Located at [lib/strings.nix:543](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L543) in `<nixpkgs>`.
+
+## `lib.strings.toLower` {#function-library-lib.strings.toLower}
+
+**Type**: `toLower :: string -> string`
+
+Converts an ASCII string to lower-case.
+
+::: {.example #function-library-example-lib.strings.toLower}
+# `lib.strings.toLower` usage example
+
+```nix
+toLower "HOME"
+=> "home"
+```
+:::
+
+Located at [lib/strings.nix:562](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L562) in `<nixpkgs>`.
+
+## `lib.strings.toUpper` {#function-library-lib.strings.toUpper}
+
+**Type**: `toUpper :: string -> string`
+
+Converts an ASCII string to upper-case.
+
+::: {.example #function-library-example-lib.strings.toUpper}
+# `lib.strings.toUpper` usage example
+
+```nix
+toUpper "home"
+=> "HOME"
+```
+:::
+
+Located at [lib/strings.nix:572](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L572) in `<nixpkgs>`.
+
+## `lib.strings.addContextFrom` {#function-library-lib.strings.addContextFrom}
+
+Appends string context from another string.  This is an implementation
+detail of Nix and should be used carefully.
+
+Strings in Nix carry an invisible `context` which is a list of strings
+representing store paths.  If the string is later used in a derivation
+attribute, the derivation will properly populate the inputDrvs and
+inputSrcs.
+
+`a`
+
+: Function argument
+
+
+`b`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.addContextFrom}
+# `lib.strings.addContextFrom` usage example
+
+```nix
+pkgs = import <nixpkgs> { };
+addContextFrom pkgs.coreutils "bar"
+=> "bar"
+```
+:::
+
+Located at [lib/strings.nix:587](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L587) in `<nixpkgs>`.
+
+## `lib.strings.splitString` {#function-library-lib.strings.splitString}
+
+Cut a string with a separator and produces a list of strings which
+were separated by this separator.
+
+`sep`
+
+: Function argument
+
+
+`s`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.splitString}
+# `lib.strings.splitString` usage example
+
+```nix
+splitString "." "foo.bar.baz"
+=> [ "foo" "bar" "baz" ]
+splitString "/" "/usr/local/bin"
+=> [ "" "usr" "local" "bin" ]
+```
+:::
+
+Located at [lib/strings.nix:598](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L598) in `<nixpkgs>`.
+
+## `lib.strings.removePrefix` {#function-library-lib.strings.removePrefix}
+
+**Type**: `string -> string -> string`
+
+Return a string without the specified prefix, if the prefix matches.
+
+`prefix`
+
+: Prefix to remove if it matches
+
+
+`str`
+
+: Input string
+
+
+::: {.example #function-library-example-lib.strings.removePrefix}
+# `lib.strings.removePrefix` usage example
+
+```nix
+removePrefix "foo." "foo.bar.baz"
+=> "bar.baz"
+removePrefix "xxx" "foo.bar.baz"
+=> "foo.bar.baz"
+```
+:::
+
+Located at [lib/strings.nix:614](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L614) in `<nixpkgs>`.
+
+## `lib.strings.removeSuffix` {#function-library-lib.strings.removeSuffix}
+
+**Type**: `string -> string -> string`
+
+Return a string without the specified suffix, if the suffix matches.
+
+`suffix`
+
+: Suffix to remove if it matches
+
+
+`str`
+
+: Input string
+
+
+::: {.example #function-library-example-lib.strings.removeSuffix}
+# `lib.strings.removeSuffix` usage example
+
+```nix
+removeSuffix "front" "homefront"
+=> "home"
+removeSuffix "xxx" "homefront"
+=> "homefront"
+```
+:::
+
+Located at [lib/strings.nix:647](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L647) in `<nixpkgs>`.
+
+## `lib.strings.versionOlder` {#function-library-lib.strings.versionOlder}
+
+Return true if string v1 denotes a version older than v2.
+
+`v1`
+
+: Function argument
+
+
+`v2`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.versionOlder}
+# `lib.strings.versionOlder` usage example
+
+```nix
+versionOlder "1.1" "1.2"
+=> true
+versionOlder "1.1" "1.1"
+=> false
+```
+:::
+
+Located at [lib/strings.nix:678](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L678) in `<nixpkgs>`.
+
+## `lib.strings.versionAtLeast` {#function-library-lib.strings.versionAtLeast}
+
+Return true if string v1 denotes a version equal to or newer than v2.
+
+`v1`
+
+: Function argument
+
+
+`v2`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.versionAtLeast}
+# `lib.strings.versionAtLeast` usage example
+
+```nix
+versionAtLeast "1.1" "1.0"
+=> true
+versionAtLeast "1.1" "1.1"
+=> true
+versionAtLeast "1.1" "1.2"
+=> false
+```
+:::
+
+Located at [lib/strings.nix:690](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L690) in `<nixpkgs>`.
+
+## `lib.strings.getName` {#function-library-lib.strings.getName}
+
+This function takes an argument that's either a derivation or a
+derivation's "name" attribute and extracts the name part from that
+argument.
+
+`x`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.getName}
+# `lib.strings.getName` usage example
+
+```nix
+getName "youtube-dl-2016.01.01"
+=> "youtube-dl"
+getName pkgs.youtube-dl
+=> "youtube-dl"
+```
+:::
+
+Located at [lib/strings.nix:702](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L702) in `<nixpkgs>`.
+
+## `lib.strings.getVersion` {#function-library-lib.strings.getVersion}
+
+This function takes an argument that's either a derivation or a
+derivation's "name" attribute and extracts the version part from that
+argument.
+
+`x`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.getVersion}
+# `lib.strings.getVersion` usage example
+
+```nix
+getVersion "youtube-dl-2016.01.01"
+=> "2016.01.01"
+getVersion pkgs.youtube-dl
+=> "2016.01.01"
+```
+:::
+
+Located at [lib/strings.nix:719](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L719) in `<nixpkgs>`.
+
+## `lib.strings.nameFromURL` {#function-library-lib.strings.nameFromURL}
+
+Extract name with version from URL. Ask for separator which is
+supposed to start extension.
+
+`url`
+
+: Function argument
+
+
+`sep`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.nameFromURL}
+# `lib.strings.nameFromURL` usage example
+
+```nix
+nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "-"
+=> "nix"
+nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "_"
+=> "nix-1.7-x86"
+```
+:::
+
+Located at [lib/strings.nix:735](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L735) in `<nixpkgs>`.
+
+## `lib.strings.mesonOption` {#function-library-lib.strings.mesonOption}
+
+**Type**:
+```
+mesonOption :: string -> string -> string
+
+@param feature The feature to be set
+@param value The desired value
+```
+
+Create a -D<feature>=<value> string that can be passed to typical Meson
+invocations.
+
+`feature`
+
+: Function argument
+
+
+`value`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.mesonOption}
+# `lib.strings.mesonOption` usage example
+
+```nix
+mesonOption "engine" "opengl"
+=> "-Dengine=opengl"
+```
+:::
+
+Located at [lib/strings.nix:754](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L754) in `<nixpkgs>`.
+
+## `lib.strings.mesonBool` {#function-library-lib.strings.mesonBool}
+
+**Type**:
+```
+mesonBool :: string -> bool -> string
+
+@param condition The condition to be made true or false
+@param flag The controlling flag of the condition
+```
+
+Create a -D<condition>={true,false} string that can be passed to typical
+Meson invocations.
+
+`condition`
+
+: Function argument
+
+
+`flag`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.mesonBool}
+# `lib.strings.mesonBool` usage example
+
+```nix
+mesonBool "hardened" true
+=> "-Dhardened=true"
+mesonBool "static" false
+=> "-Dstatic=false"
+```
+:::
+
+Located at [lib/strings.nix:773](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L773) in `<nixpkgs>`.
+
+## `lib.strings.mesonEnable` {#function-library-lib.strings.mesonEnable}
+
+**Type**:
+```
+mesonEnable :: string -> bool -> string
+
+@param feature The feature to be enabled or disabled
+@param flag The controlling flag
+```
+
+Create a -D<feature>={enabled,disabled} string that can be passed to
+typical Meson invocations.
+
+`feature`
+
+: Function argument
+
+
+`flag`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.mesonEnable}
+# `lib.strings.mesonEnable` usage example
+
+```nix
+mesonEnable "docs" true
+=> "-Ddocs=enabled"
+mesonEnable "savage" false
+=> "-Dsavage=disabled"
+```
+:::
+
+Located at [lib/strings.nix:792](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L792) in `<nixpkgs>`.
+
+## `lib.strings.enableFeature` {#function-library-lib.strings.enableFeature}
+
+Create an --{enable,disable}-<feat> string that can be passed to
+standard GNU Autoconf scripts.
+
+`enable`
+
+: Function argument
+
+
+`feat`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.enableFeature}
+# `lib.strings.enableFeature` usage example
+
+```nix
+enableFeature true "shared"
+=> "--enable-shared"
+enableFeature false "shared"
+=> "--disable-shared"
+```
+:::
+
+Located at [lib/strings.nix:806](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L806) in `<nixpkgs>`.
+
+## `lib.strings.enableFeatureAs` {#function-library-lib.strings.enableFeatureAs}
+
+Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
+standard GNU Autoconf scripts.
+
+`enable`
+
+: Function argument
+
+
+`feat`
+
+: Function argument
+
+
+`value`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.enableFeatureAs}
+# `lib.strings.enableFeatureAs` usage example
+
+```nix
+enableFeatureAs true "shared" "foo"
+=> "--enable-shared=foo"
+enableFeatureAs false "shared" (throw "ignored")
+=> "--disable-shared"
+```
+:::
+
+Located at [lib/strings.nix:819](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L819) in `<nixpkgs>`.
+
+## `lib.strings.withFeature` {#function-library-lib.strings.withFeature}
+
+Create an --{with,without}-<feat> string that can be passed to
+standard GNU Autoconf scripts.
+
+`with_`
+
+: Function argument
+
+
+`feat`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.withFeature}
+# `lib.strings.withFeature` usage example
+
+```nix
+withFeature true "shared"
+=> "--with-shared"
+withFeature false "shared"
+=> "--without-shared"
+```
+:::
+
+Located at [lib/strings.nix:830](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L830) in `<nixpkgs>`.
+
+## `lib.strings.withFeatureAs` {#function-library-lib.strings.withFeatureAs}
+
+Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
+standard GNU Autoconf scripts.
+
+`with_`
+
+: Function argument
+
+
+`feat`
+
+: Function argument
+
+
+`value`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.withFeatureAs}
+# `lib.strings.withFeatureAs` usage example
+
+```nix
+withFeatureAs true "shared" "foo"
+=> "--with-shared=foo"
+withFeatureAs false "shared" (throw "ignored")
+=> "--without-shared"
+```
+:::
+
+Located at [lib/strings.nix:843](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L843) in `<nixpkgs>`.
+
+## `lib.strings.fixedWidthString` {#function-library-lib.strings.fixedWidthString}
+
+**Type**: `fixedWidthString :: int -> string -> string -> string`
+
+Create a fixed width string with additional prefix to match
+required width.
+
+This function will fail if the input string is longer than the
+requested length.
+
+`width`
+
+: Function argument
+
+
+`filler`
+
+: Function argument
+
+
+`str`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.fixedWidthString}
+# `lib.strings.fixedWidthString` usage example
+
+```nix
+fixedWidthString 5 "0" (toString 15)
+=> "00015"
+```
+:::
+
+Located at [lib/strings.nix:857](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L857) in `<nixpkgs>`.
+
+## `lib.strings.fixedWidthNumber` {#function-library-lib.strings.fixedWidthNumber}
+
+Format a number adding leading zeroes up to fixed width.
+
+`width`
+
+: Function argument
+
+
+`n`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.fixedWidthNumber}
+# `lib.strings.fixedWidthNumber` usage example
+
+```nix
+fixedWidthNumber 5 15
+=> "00015"
+```
+:::
+
+Located at [lib/strings.nix:874](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L874) in `<nixpkgs>`.
+
+## `lib.strings.floatToString` {#function-library-lib.strings.floatToString}
+
+Convert a float to a string, but emit a warning when precision is lost
+during the conversion
+
+`float`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.floatToString}
+# `lib.strings.floatToString` usage example
+
+```nix
+floatToString 0.000001
+=> "0.000001"
+floatToString 0.0000001
+=> trace: warning: Imprecise conversion from float to string 0.000000
+   "0.000000"
+```
+:::
+
+Located at [lib/strings.nix:886](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L886) in `<nixpkgs>`.
+
+## `lib.strings.isCoercibleToString` {#function-library-lib.strings.isCoercibleToString}
+
+Soft-deprecated function. While the original implementation is available as
+isConvertibleWithToString, consider using isStringLike instead, if suitable.
+
+Located at [lib/strings.nix:894](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L894) in `<nixpkgs>`.
+
+## `lib.strings.isConvertibleWithToString` {#function-library-lib.strings.isConvertibleWithToString}
+
+Check whether a list or other value can be passed to toString.
+
+Many types of value are coercible to string this way, including int, float,
+null, bool, list of similarly coercible values.
+
+`x`
+
+: Function argument
+
+
+Located at [lib/strings.nix:903](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L903) in `<nixpkgs>`.
+
+## `lib.strings.isStringLike` {#function-library-lib.strings.isStringLike}
+
+Check whether a value can be coerced to a string.
+The value must be a string, path, or attribute set.
+
+String-like values can be used without explicit conversion in
+string interpolations and in most functions that expect a string.
+
+`x`
+
+: Function argument
+
+
+Located at [lib/strings.nix:914](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L914) in `<nixpkgs>`.
+
+## `lib.strings.isStorePath` {#function-library-lib.strings.isStorePath}
+
+Check whether a value is a store path.
+
+`x`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.isStorePath}
+# `lib.strings.isStorePath` usage example
+
+```nix
+isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/bin/python"
+=> false
+isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11"
+=> true
+isStorePath pkgs.python
+=> true
+isStorePath [] || isStorePath 42 || isStorePath {} || …
+=> false
+```
+:::
+
+Located at [lib/strings.nix:932](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L932) in `<nixpkgs>`.
+
+## `lib.strings.toInt` {#function-library-lib.strings.toInt}
+
+**Type**: `string -> int`
+
+Parse a string as an int. Does not support parsing of integers with preceding zero due to
+ambiguity between zero-padded and octal numbers. See toIntBase10.
+
+`str`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.toInt}
+# `lib.strings.toInt` usage example
+
+```nix
+toInt "1337"
+=> 1337
+
+toInt "-4"
+=> -4
+
+toInt " 123 "
+=> 123
+
+toInt "00024"
+=> error: Ambiguity in interpretation of 00024 between octal and zero padded integer.
+
+toInt "3.14"
+=> error: floating point JSON numbers are not supported
+```
+:::
+
+Located at [lib/strings.nix:962](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L962) in `<nixpkgs>`.
+
+## `lib.strings.toIntBase10` {#function-library-lib.strings.toIntBase10}
+
+**Type**: `string -> int`
+
+Parse a string as a base 10 int. This supports parsing of zero-padded integers.
+
+`str`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.toIntBase10}
+# `lib.strings.toIntBase10` usage example
+
+```nix
+toIntBase10 "1337"
+=> 1337
+
+toIntBase10 "-4"
+=> -4
+
+toIntBase10 " 123 "
+=> 123
+
+toIntBase10 "00024"
+=> 24
+
+toIntBase10 "3.14"
+=> error: floating point JSON numbers are not supported
+```
+:::
+
+Located at [lib/strings.nix:1013](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L1013) in `<nixpkgs>`.
+
+## `lib.strings.readPathsFromFile` {#function-library-lib.strings.readPathsFromFile}
+
+Read a list of paths from `file`, relative to the `rootPath`.
+Lines beginning with `#` are treated as comments and ignored.
+Whitespace is significant.
+
+NOTE: This function is not performant and should be avoided.
+
+::: {.example #function-library-example-lib.strings.readPathsFromFile}
+# `lib.strings.readPathsFromFile` usage example
+
+```nix
+readPathsFromFile /prefix
+  ./pkgs/development/libraries/qt-5/5.4/qtbase/series
+=> [ "/prefix/dlopen-resolv.patch" "/prefix/tzdir.patch"
+     "/prefix/dlopen-libXcursor.patch" "/prefix/dlopen-openssl.patch"
+     "/prefix/dlopen-dbus.patch" "/prefix/xdg-config-dirs.patch"
+     "/prefix/nix-profiles-library-paths.patch"
+     "/prefix/compose-search-path.patch" ]
+```
+:::
+
+Located at [lib/strings.nix:1056](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L1056) in `<nixpkgs>`.
+
+## `lib.strings.fileContents` {#function-library-lib.strings.fileContents}
+
+**Type**: `fileContents :: path -> string`
+
+Read the contents of a file removing the trailing \n
+
+`file`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.fileContents}
+# `lib.strings.fileContents` usage example
+
+```nix
+$ echo "1.0" > ./version
+
+fileContents ./version
+=> "1.0"
+```
+:::
+
+Located at [lib/strings.nix:1076](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L1076) in `<nixpkgs>`.
+
+## `lib.strings.sanitizeDerivationName` {#function-library-lib.strings.sanitizeDerivationName}
+
+**Type**: `sanitizeDerivationName :: String -> String`
+
+Creates a valid derivation name from a potentially invalid one.
+
+::: {.example #function-library-example-lib.strings.sanitizeDerivationName}
+# `lib.strings.sanitizeDerivationName` usage example
+
+```nix
+sanitizeDerivationName "../hello.bar # foo"
+=> "-hello.bar-foo"
+sanitizeDerivationName ""
+=> "unknown"
+sanitizeDerivationName pkgs.hello
+=> "-nix-store-2g75chlbpxlrqn15zlby2dfh8hr9qwbk-hello-2.10"
+```
+:::
+
+Located at [lib/strings.nix:1091](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L1091) in `<nixpkgs>`.
+
+## `lib.strings.levenshtein` {#function-library-lib.strings.levenshtein}
+
+**Type**: `levenshtein :: string -> string -> int`
+
+Computes the Levenshtein distance between two strings.
+Complexity O(n*m) where n and m are the lengths of the strings.
+Algorithm adjusted from https://stackoverflow.com/a/9750974/6605742
+
+`a`
+
+: Function argument
+
+
+`b`
+
+: Function argument
+
+
+::: {.example #function-library-example-lib.strings.levenshtein}
+# `lib.strings.levenshtein` usage example
+
+```nix
+levenshtein "foo" "foo"
+=> 0
+levenshtein "book" "hook"
+=> 1
+levenshtein "hello" "Heyo"
+=> 3
+```
+:::
+
+Located at [lib/strings.nix:1130](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L1130) in `<nixpkgs>`.
+
+## `lib.strings.commonPrefixLength` {#function-library-lib.strings.commonPrefixLength}
+
+Returns the length of the prefix common to both strings.
+
+`a`
+
+: Function argument
+
+
+`b`
+
+: Function argument
+
+
+Located at [lib/strings.nix:1151](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L1151) in `<nixpkgs>`.
+
+## `lib.strings.commonSuffixLength` {#function-library-lib.strings.commonSuffixLength}
+
+Returns the length of the suffix common to both strings.
+
+`a`
+
+: Function argument
+
+
+`b`
+
+: Function argument
+
+
+Located at [lib/strings.nix:1159](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L1159) in `<nixpkgs>`.
+
+## `lib.strings.levenshteinAtMost` {#function-library-lib.strings.levenshteinAtMost}
+
+**Type**: `levenshteinAtMost :: int -> string -> string -> bool`
+
+Returns whether the levenshtein distance between two strings is at most some value
+Complexity is O(min(n,m)) for k <= 2 and O(n*m) otherwise
+
+::: {.example #function-library-example-lib.strings.levenshteinAtMost}
+# `lib.strings.levenshteinAtMost` usage example
+
+```nix
+levenshteinAtMost 0 "foo" "foo"
+=> true
+levenshteinAtMost 1 "foo" "boa"
+=> false
+levenshteinAtMost 2 "foo" "boa"
+=> true
+levenshteinAtMost 2 "This is a sentence" "this is a sentense."
+=> false
+levenshteinAtMost 3 "This is a sentence" "this is a sentense."
+=> true
+```
+:::
+
+Located at [lib/strings.nix:1183](https://github.com/NixOS/nixpkgs/blob/580dd2124db98c13c3798af23c2ecf6277ec7d9e/lib/strings.nix#L1183) in `<nixpkgs>`.

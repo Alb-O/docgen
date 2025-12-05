@@ -1,0 +1,71 @@
+{
+  "services.test.enable": {
+    "loc": ["services", "test", "enable"],
+    "description": "Whether to enable the test service.\n\nThis is a multi-line description with **markdown** support.",
+    "type": "boolean",
+    "default": { "_type": "literalExpression", "text": "false" },
+    "example": { "_type": "literalExpression", "text": "true" },
+    "declarations": ["modules/services/test.nix"],
+    "readOnly": false
+  },
+  "services.test.package": {
+    "loc": ["services", "test", "package"],
+    "description": "The test package to use.",
+    "type": "package",
+    "default": { "_type": "literalExpression", "text": "pkgs.test" },
+    "declarations": ["modules/services/test.nix"],
+    "readOnly": false
+  },
+  "services.test.settings": {
+    "loc": ["services", "test", "settings"],
+    "description": "Configuration settings for the test service.",
+    "type": "attribute set of anything",
+    "default": { "_type": "literalExpression", "text": "{ }" },
+    "example": { "_type": "literalExpression", "text": "{\n  port = 8080;\n  host = \"localhost\";\n}" },
+    "declarations": ["modules/services/test.nix"],
+    "readOnly": false
+  },
+  "services.test.extraConfig": {
+    "loc": ["services", "test", "extraConfig"],
+    "description": "Extra configuration lines.",
+    "type": "strings concatenated with \"\\n\"",
+    "default": { "_type": "literalExpression", "text": "\"\"" },
+    "declarations": ["modules/services/test.nix"],
+    "readOnly": false
+  },
+  "programs.editor.name": {
+    "loc": ["programs", "editor", "name"],
+    "description": { "_type": "mdDoc", "text": "The name of the editor to use.\n\nSupports `vim`, `emacs`, or `nano`." },
+    "type": "one of \"vim\", \"emacs\", \"nano\"",
+    "default": { "_type": "literalExpression", "text": "\"vim\"" },
+    "declarations": [
+      { "name": "modules/programs/editor.nix", "url": "https://github.com/example/repo/blob/main/modules/programs/editor.nix" }
+    ],
+    "readOnly": false
+  },
+  "system.readOnlyOption": {
+    "loc": ["system", "readOnlyOption"],
+    "description": "A read-only option that cannot be set by users.",
+    "type": "string",
+    "default": { "_type": "literalExpression", "text": "\"computed-value\"" },
+    "declarations": ["modules/system.nix"],
+    "readOnly": true
+  },
+  "networking.interfaces.<name>.ipv4.addresses": {
+    "loc": ["networking", "interfaces", "<name>", "ipv4", "addresses"],
+    "description": "List of IPv4 addresses for this interface.",
+    "type": "list of (submodule)",
+    "default": { "_type": "literalExpression", "text": "[ ]" },
+    "example": { "_type": "literalExpression", "text": "[\n  { address = \"192.168.1.1\"; prefixLength = 24; }\n]" },
+    "declarations": ["modules/networking.nix"],
+    "readOnly": false
+  },
+  "documentation.info": {
+    "loc": ["documentation", "info"],
+    "description": "Example with literalMD.",
+    "type": "boolean",
+    "default": { "_type": "literalMD", "text": "Depends on {option}`documentation.enable`" },
+    "declarations": ["modules/documentation.nix"],
+    "readOnly": false
+  }
+}
