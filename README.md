@@ -1,12 +1,17 @@
 # docgen
 
-Generate API documentation from Nix source files using [nixdoc](https://github.com/nix-community/nixdoc) and [mdbook](https://rust-lang.github.io/mdBook/).
+Documentation generator for Nix projects. Extracts documentation from file comments, function doc comments, and NixOS-style module options, producing markdown suitable for [mdbook](https://rust-lang.github.io/mdBook/) sites.
 
-docgen extracts documentation from file comments, function doc comments, and NixOS-style module options, producing markdown suitable for mdbook sites.
+## Structure
+
+```
+docgen/
+├── rs/       # Rust CLI that parses Nix and emits markdown
+├── nix/      # Nix library for orchestrating doc generation
+└── tests/    # nix-unit tests
+```
 
 ## Quick start
-
-Add docgen as a flake input:
 
 ```nix
 {
@@ -14,64 +19,48 @@ Add docgen as a flake input:
 }
 ```
 
-Create a documentation manifest (`_docs.nix` or similar):
+Create a manifest defining what to document:
 
 ```nix
+# docs/manifest.nix
 {
-  files = {
-    title = "File Reference";
-    sections = [
-      {
-        name = "Core";
-        files = [
-          "default.nix"
-          "api.nix"
-          { name = "lib.nix"; fallback = "Internal utilities."; }
-        ];
-      }
-    ];
-  };
-
   methods = {
     title = "API Methods";
     sections = [
       { file = "api.nix"; }
-      { file = "lib.nix"; heading = "Utilities"; exports = [ "helper" "util" ]; }
+      { file = "lib.nix"; heading = "Utilities"; exports = [ "helper" ]; }
     ];
   };
 
   options = {
     title = "Module Options";
-    anchorPrefix = "opt-";
   };
 }
 ```
 
-Create a docgen instance:
+Wire it up:
 
 ```nix
 {
-  perSystem = { pkgs, self', ... }:
+  perSystem = { pkgs, ... }:
     let
       dg = docgen.mkDocgen {
         inherit pkgs;
-        manifest = ./src/_docs.nix;
+        manifest = ./docs/manifest.nix;
         srcDir = ./src;
         siteDir = ./docs;
         name = "myproject";
-        optionsJson = self'.packages.options-json;  # optional
       };
     in {
       packages.docs = dg.docs;
       apps.docs.program = dg.serveDocsScript;
-      apps.build-docs.program = dg.buildDocsScript;
     };
 }
 ```
 
-## mkDocgen arguments
+## mkDocgen
 
-Required:
+Required arguments:
 
 | Argument   | Description                               |
 | ---------- | ----------------------------------------- |
@@ -79,53 +68,31 @@ Required:
 | `manifest` | Path or attrset defining what to document |
 | `srcDir`   | Source directory containing .nix files    |
 
-Optional:
+Optional arguments:
 
-| Argument       | Default       | Description                                                 |
-| -------------- | ------------- | ----------------------------------------------------------- |
-| `siteDir`      | `null`        | mdbook site directory (contains book.toml)                  |
-| `extraFiles`   | `{}`          | Extra files to copy (e.g. `{ "README.md" = ./README.md; }`) |
-| `optionsJson`  | `null`        | JSON file for options.md generation                         |
-| `anchorPrefix` | `""`          | Prefix for function anchors                                 |
-| `name`         | `"docs"`      | Project name for derivation                                 |
-| `referenceDir` | `"reference"` | Subdirectory within docs/src/ for output                    |
+| Argument       | Default       | Description                                |
+| -------------- | ------------- | ------------------------------------------ |
+| `siteDir`      | `null`        | mdbook site directory (contains book.toml) |
+| `extraFiles`   | `{}`          | Extra files to copy into site              |
+| `optionsJson`  | `null`        | JSON file for options.md generation        |
+| `anchorPrefix` | `""`          | Prefix for function anchors                |
+| `name`         | `"docs"`      | Project name for derivation                |
+| `referenceDir` | `"reference"` | Subdirectory for generated reference docs  |
 
-Returns an attrset with:
+Returns:
 
-| Attribute            | Description                               |
-| -------------------- | ----------------------------------------- |
-| `docs`               | Built mdbook site derivation              |
-| `apiReference`       | Generated markdown files only             |
-| `serveDocsScript`    | Script for local serving with live reload |
-| `buildDocsScript`    | Script for local building                 |
-| `generateDocsScript` | Low-level markdown generation script      |
+| Attribute         | Description                               |
+| ----------------- | ----------------------------------------- |
+| `docs`            | Built mdbook site derivation              |
+| `apiReference`    | Generated markdown files only             |
+| `serveDocsScript` | Script for local serving with live reload |
+| `buildDocsScript` | Script for local building                 |
 
 ## Manifest schema
 
-### files
-
-Generate a file reference with descriptions from file-level doc comments:
-
-```nix
-{
-  files = {
-    title = "File Reference";
-    sections = [
-      {
-        name = "Section Name";
-        files = [
-          "file.nix"
-          { name = "other.nix"; fallback = "Description if no doc comment"; }
-        ];
-      }
-    ];
-  };
-}
-```
-
 ### methods
 
-Generate function documentation using nixdoc:
+Function documentation from `/** ... */` doc comments:
 
 ```nix
 {
@@ -139,9 +106,30 @@ Generate function documentation using nixdoc:
 }
 ```
 
+### files
+
+File-level descriptions from `# ...` comments at the top of files:
+
+```nix
+{
+  files = {
+    title = "File Reference";
+    sections = [
+      {
+        name = "Core";
+        files = [
+          "default.nix"
+          { name = "lib.nix"; fallback = "Internal utilities."; }
+        ];
+      }
+    ];
+  };
+}
+```
+
 ### options
 
-Generate module options documentation from JSON:
+Module options from JSON (use `docgen.lib.optionsToJson` to generate):
 
 ```nix
 {
@@ -152,61 +140,58 @@ Generate module options documentation from JSON:
 }
 ```
 
-## Options JSON helper
-
-Convert NixOS-style options to JSON for nixdoc:
-
-```nix
-docgen.lib.optionsToJson {
-  optionsModule = { lib, ... }: {
-    options.myApp = {
-      enable = lib.mkEnableOption "myApp";
-      port = lib.mkOption {
-        type = lib.types.port;
-        default = 8080;
-        description = "Port to listen on";
-      };
-    };
-  };
-  prefix = "myApp.";  # optional filter
-}
-```
-
 ## Writing doc comments
 
-File-level:
-
-```nix
-# This file provides the core API for managing widgets.
-#
-# It exports functions for creating, updating, and deleting widgets.
-{ lib }:
-{ ... }
-```
-
-Function-level (nixdoc format):
+Function-level:
 
 ````nix
 {
   /**
-    Create a new widget with the given name.
+    Short description.
 
     # Arguments
 
-    - `name` (string): The widget name
-    - `options` (attrset): Optional configuration
+    - `arg1` (type): description
 
     # Example
 
     ```nix
-    mkWidget "foo" { color = "red"; }
-    => { name = "foo"; color = "red"; }
+    myFn "foo" { }
+    => { result = "foo"; }
     ```
   */
-  mkWidget = name: options: { inherit name; } // options;
+  myFn = arg1: arg2: { ... };
 }
 ````
 
+File-level (before any code):
+
+```nix
+# Brief description of what this file provides.
+{ lib }:
+{ ... }
+```
+
+## Development
+
+```sh
+nix build             # build docgen CLI
+nix flake check       # run all checks
+nix fmt               # format everything
+nix develop           # shell with Rust toolchain
+```
+
+Rust tests with snapshot updates:
+
+```sh
+cd rs && cargo insta test
+cargo insta review
+```
+
+## Attribution
+
+Rust component originally developed by @infinisil as [nixdoc](https://github.com/nix-community/nixdoc)
+
 ## License
 
-MIT
+[GPL-3.0](LICENSE)

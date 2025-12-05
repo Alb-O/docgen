@@ -1,0 +1,57 @@
+---
+source: src/test.rs
+expression: output
+---
+# Debug {#sec-functions-library-debug}
+
+
+## `lib.debug.omited` {#function-library-lib.debug.omited}
+
+Doc-comment
+
+`arg`
+
+: Function argument
+
+
+## `lib.debug.multiple` {#function-library-lib.debug.multiple}
+
+Doc-comment
+
+`arg`
+
+: Function argument
+
+
+`foo`
+
+: Function argument
+
+
+`bar`
+
+: Function argument
+
+
+## `lib.debug.argumentTest` {#function-library-lib.debug.argumentTest}
+
+Doc-comment before the lambda causes the whole
+lambda including its arguments to use doc-comment style
+
+structured function argument
+
+: `formal1`
+
+  : First formal
+
+  `formal2`
+
+  : Second formal
+
+  `formal3`
+
+  : Third formal
+
+  `formal4`
+
+  : Fourth formal

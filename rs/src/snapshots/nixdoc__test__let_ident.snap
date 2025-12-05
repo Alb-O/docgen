@@ -1,0 +1,59 @@
+---
+source: src/test.rs
+expression: output
+---
+## `lib.math.add` {#function-library-lib.math.add}
+
+Adds two numbers together.
+
+### Arguments
+
+- a: The first number
+- b: The second number
+
+### Type
+
+```
+add :: Int -> Int -> Int
+```
+
+### Example
+
+```nix
+add 1 2
+=> 3
+```
+
+`a`
+
+: Function argument
+
+
+`b`
+
+: Function argument
+
+
+## `lib.math.multiply` {#function-library-lib.math.multiply}
+
+Multiplies two numbers.
+
+### Arguments
+
+- x: The first number
+- y: The second number
+
+### Type
+
+```
+multiply :: Int -> Int -> Int
+```
+
+`x`
+
+: Function argument
+
+
+`y`
+
+: Function argument

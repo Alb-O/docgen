@@ -1,0 +1,19 @@
+---
+source: src/test.rs
+expression: output
+---
+## `lib.debug.docComment` {#function-library-lib.debug.docComment}
+
+doc comment in markdown format
+
+### Example
+
+This is a parsed example
+
+## `lib.debug.rfc-style` {#function-library-lib.debug.rfc-style}
+
+another doc comment
+
+## `lib.debug.foo` {#function-library-lib.debug.foo}
+
+Comment

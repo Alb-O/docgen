@@ -1,0 +1,22 @@
+---
+source: src/test.rs
+expression: output
+---
+## `lib.options.fn` {#function-library-lib.options.fn}
+
+Documented function with various argument formats.
+
+`a`
+
+: Function argument
+
+
+structured function argument
+
+: `default`
+
+  : Function argument
+
+  `example`
+
+  : Function argument
