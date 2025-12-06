@@ -7,6 +7,9 @@
     nix-unit.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+    imp.url = "github:imp-nix/imp.lib";
+    imp.inputs.nixpkgs.follows = "nixpkgs";
+    imp.inputs.treefmt-nix.follows = "treefmt-nix";
   };
 
   outputs =
@@ -15,6 +18,7 @@
       nixpkgs,
       nix-unit,
       treefmt-nix,
+      imp,
     }:
     let
       lib = nixpkgs.lib;
@@ -62,15 +66,6 @@
         in
         {
           default = pkgs.callPackage mkDocgenCli { };
-
-          mdformat = pkgs.mdformat.withPlugins (
-            ps: with ps; [
-              mdformat-gfm
-              mdformat-frontmatter
-              mdformat-footnote
-            ]
-          );
-
           mdbook = pkgs.mdbook;
         }
       );
@@ -79,18 +74,13 @@
         system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-          treefmtEval = treefmt-nix.lib.evalModule pkgs {
-            projectRootFile = "flake.nix";
-            programs.nixfmt.enable = true;
-            programs.rustfmt.enable = true;
-            settings.formatter.mdformat = {
-              command = lib.getExe self.packages.${system}.mdformat;
-              includes = [ "*.md" ];
-            };
+          formatterEval = imp.formatterLib.makeEval {
+            inherit pkgs treefmt-nix;
+            rust.enable = true;
           };
         in
         {
-          formatting = treefmtEval.config.build.check self;
+          formatting = formatterEval.config.build.check self;
 
           docgen = self.packages.${system}.default.overrideAttrs (prev: {
             doCheck = true;
@@ -114,19 +104,11 @@
 
       formatter = forAllSystems (
         system:
-        let
+        imp.formatterLib.make {
           pkgs = nixpkgs.legacyPackages.${system};
-          treefmtEval = treefmt-nix.lib.evalModule pkgs {
-            projectRootFile = "flake.nix";
-            programs.nixfmt.enable = true;
-            programs.rustfmt.enable = true;
-            settings.formatter.mdformat = {
-              command = lib.getExe self.packages.${system}.mdformat;
-              includes = [ "*.md" ];
-            };
-          };
-        in
-        treefmtEval.config.build.wrapper
+          inherit treefmt-nix;
+          rust.enable = true;
+        }
       );
 
       devShells = forAllSystems (
@@ -156,7 +138,6 @@
           siteDir ? null,
           extraFiles ? { },
           docgenPkg ? self.packages.${pkgs.system}.default,
-          mdformatPkg ? self.packages.${pkgs.system}.mdformat,
           mdbookPkg ? self.packages.${pkgs.system}.mdbook,
           optionsJson ? null,
           anchorPrefix ? "",
@@ -180,7 +161,6 @@
             srcDir
             siteDir
             extraFiles
-            mdformatPkg
             mdbookPkg
             optionsJson
             anchorPrefix

@@ -10,7 +10,6 @@
   siteDir,
   extraFiles,
   nixdocPkg,
-  mdformatPkg,
   mdbookPkg,
   optionsJson,
   anchorPrefix,
@@ -21,6 +20,15 @@
   docgenLib,
 }:
 let
+  # mdformat with plugins for formatting generated markdown
+  mdformatPkg = pkgs.mdformat.withPlugins (
+    ps: with ps; [
+      mdformat-gfm
+      mdformat-frontmatter
+      mdformat-footnote
+    ]
+  );
+
   # Load manifest if it's a path
   loadedManifest = if builtins.isPath manifest then import manifest else manifest;
 
@@ -262,7 +270,6 @@ in
   # Expose the packages for consumers
   packages = {
     docgen = nixdocPkg;
-    mdformat = mdformatPkg;
     mdbook = mdbookPkg;
   };
 
