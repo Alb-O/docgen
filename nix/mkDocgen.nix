@@ -157,7 +157,7 @@ let
             ""
         )
         + lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (dest: src: "cp ${src} $out/src/${dest}") extraFiles
+          lib.mapAttrsToList (dest: src: ''cp "${src}" "$out/src/${dest}"'') extraFiles
         )
       )
     else
@@ -210,10 +210,6 @@ let
         mkdir -p "$REF_DIR"
         ${generateDocsScript} "$SRC_DIR" "$REF_DIR" "$OPTIONS_JSON"
 
-        ${lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (dest: src: ''cp "${src}" "$SITE_DIR/src/${dest}"'') extraFiles
-        )}
-
         echo "Starting mdbook server..."
         $MDBOOK serve "$SITE_DIR" &
         pid=$!
@@ -245,10 +241,6 @@ let
         echo "Generating API reference..."
         mkdir -p "$REF_DIR"
         ${generateDocsScript} "$SRC_DIR" "$REF_DIR" "$OPTIONS_JSON"
-
-        ${lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (dest: src: ''cp "${src}" "$SITE_DIR/src/${dest}"'') extraFiles
-        )}
 
         $MDBOOK build "$SITE_DIR"
         echo "Documentation built in '$SITE_DIR/book' directory."
